@@ -8,7 +8,7 @@ package Proyecto_2;
  *  Decir si aprobó o reprobó (ejemplo: nota ≥ 60 = aprobado).
  */
 
-import java.util.Arrays;
+//import java.util.Arrays;
 import java.util.Scanner;
 
 public class Proyecto2_Calculadora_de_Notas {

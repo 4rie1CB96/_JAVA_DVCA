@@ -1,0 +1,12 @@
+Nombre: Arielito
+Apellido: Delvalle
+Teléfono: 0971456789
+-----
+Nombre: Miguel
+Apellido: Lopez
+Teléfono: 0971564789
+-----
+Nombre: Pablito
+Apellido: Pintos
+Teléfono: 0971564123
+-----
