@@ -9,7 +9,7 @@ package ProyectoExtra;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-public class ProyectoExta_1 {
+public class ProyectoExtra_1 {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         boolean flag = true;
