@@ -7,7 +7,9 @@
 package ProyectoExtra;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -16,10 +18,10 @@ import java.util.Scanner;
 
 class Evento {
     private String nombre;
-    private String fecha;
-    private String hora;
+    private LocalDate fecha;
+    private LocalTime hora;
 
-    public Evento(String nombre, String fecha, String hora) {
+    public Evento(String nombre, LocalDate fecha, LocalTime hora) {
         this.nombre = nombre;
         this.fecha = fecha;
         this.hora = hora;
@@ -29,16 +31,16 @@ class Evento {
         return nombre;
     }
 
-    public String getFecha() {
+    public LocalDate getFecha() {
         return fecha;
     }
 
-    public String getHora() {
+    public LocalTime getHora() {
         return hora;
     }
 
     public String toString() {
-        return "Evento [nombre=" + nombre + ", fecha=" + fecha + ", hora=" + hora + "]";
+        return "Evento [nombre= " + nombre + ", fecha= " + fecha.format(DateTimeFormatter.ofPattern("E/MMM/yyyy")) + ", hora= " + hora + "]";
     }
 }
 
@@ -46,9 +48,9 @@ public class ProyectoExtra_4 {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         ArrayList<Evento> eventoList = new ArrayList<>();
-        String nombre, fecha, hora;
-        String[] arrayDate = new String[3];
-        String[] arrayTime = new String[2];
+        LocalDate fechaEvento;
+        LocalTime horaEvento;
+        String nombre;
 
         boolean flag = true;
         while (flag) {
@@ -64,37 +66,20 @@ public class ProyectoExtra_4 {
                         nombre = sc.nextLine();
 
                         System.out.println("Ingrese la fecha del evento (dd/mm/aaaa)");
-                        fecha = sc.nextLine();
-                        arrayDate = fecha.split("/");
+                        fechaEvento = LocalDate.parse(sc.nextLine(), DateTimeFormatter.ofPattern("dd/MM/yyyy"));
 
-                        // convertir
-                        int dia = Integer.parseInt(arrayDate[0]);
-                        int mes = Integer.parseInt(arrayDate[1]);
-                        int anio = Integer.parseInt(arrayDate[2]);
-
-                        LocalDate fechaEvento = LocalDate.of(anio, mes, dia);
                         LocalDate fechaActual = LocalDate.now();
-                        DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
                         if (fechaEvento.isBefore(fechaActual)) {
                             System.out.println("Error: La fecha del evento no puede ser anterior a la fecha actual: "
-                                    + fechaActual.format(formato));
+                                    + fechaActual.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
                         } else {
-                            System.out.println("Ingrese la hora del Evento (hh:mm)");
-                            hora = sc.nextLine();
+                            System.out.println("Ingrese la hora del Evento (H:m)");
+                            horaEvento = LocalTime.parse(sc.nextLine(), DateTimeFormatter.ofPattern("H:m"));
+                            Evento evento = new Evento(nombre, fechaEvento, horaEvento);
+                            eventoList.add(evento);
+                            System.out.println("Evento agregado exitosamente.");
 
-                            arrayTime = hora.split(":");
-
-                            int horaEvento = Integer.parseInt(arrayTime[0]);
-                            int minutoEvento = Integer.parseInt(arrayTime[1]);
-
-                            if (horaEvento < 0 || horaEvento > 23 || minutoEvento < 0 || minutoEvento > 59) {
-                                System.out.println("Error: La hora ingresada no es válida.");
-                            } else {
-                                Evento evento = new Evento(nombre, fecha, hora);
-                                eventoList.add(evento);
-                                System.out.println("Evento agregado exitosamente.");
-                            }
                         }
                     }
                     case 2 -> {
@@ -105,7 +90,7 @@ public class ProyectoExtra_4 {
                             Collections.sort(eventoList,
                                     Comparator.comparing(Evento::getFecha).thenComparing(Evento::getHora));
                             for (Evento e : eventoList) {
-                                System.out.println(e);
+                                System.out.println(e.toString());
                             }
                         }
                     }
@@ -121,15 +106,11 @@ public class ProyectoExtra_4 {
             } catch (InputMismatchException e) {
                 System.out.println("Error: Valor no válido");
                 sc.nextLine();
-                // continue;
             } catch (NumberFormatException e) {
                 System.out.println("Error: Tipo de dato no válido");
                 sc.nextLine();
-                // continue;
-            } catch (ArrayIndexOutOfBoundsException e) {
-                System.out.println("Error: Fecha u hora no válida");
-                sc.nextLine();
-                // continue;
+            } catch (DateTimeParseException e) {
+                System.out.println("Error: Formato de fecha/hora no válido");
             }
         }
     }
